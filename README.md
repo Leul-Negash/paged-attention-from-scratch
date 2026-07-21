@@ -62,7 +62,6 @@ Each script is self-contained and prints its own results and assertions.
 
 ## Notes
 
-- Task 3 (3a/3b/3c) is the bonus tier; it is implemented in full.
 - Block size is a constructor parameter and works for any power of two.
 - The naive and paged allocators run on the identical seeded workload so the
   head-to-head numbers are reproducible to the digit.
