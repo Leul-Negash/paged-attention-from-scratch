@@ -20,6 +20,8 @@ the same block content.
 paged_attention/            core library, one module per concept
   mock_llm.py               deterministic token generator
   request.py                Request model (priority, deadline, token_budget)
+  exceptions.py             typed allocator faults the harness catches
+  workload.py               seeded Poisson arrivals / exponential service
   physical_blocks.py        the global free pool  (allocate / free)
   page_table.py             logical block index -> physical block id
   paged_allocator.py        on-demand allocation, ties the two together
