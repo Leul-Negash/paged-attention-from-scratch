@@ -26,7 +26,9 @@ def main() -> None:
             continue
         print("\n" + "=" * 72)
         print(f"TASK {tag}  -  {title}")
-        print("=" * 72)
+        # Flush before handing stdout to the child, otherwise the banner lands
+        # out of order whenever this output is piped or redirected.
+        print("=" * 72, flush=True)
         subprocess.run([sys.executable, str(ROOT / path)], check=True)
 
 
