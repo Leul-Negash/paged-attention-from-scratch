@@ -57,10 +57,12 @@ def main() -> None:
           f"(requirement: >= 3x)")
     print(f"recompute evictions      : {stats['recompute_evictions']}")
     print(f"swap evictions           : {stats['swap_evictions']}")
-    print(f"byte-identical mismatches: {stats['mismatches']}  (target: 0)")
+    print(f"mismatches at first completion: {stats['mismatches']}  (target: 0)")
+    print(f"mismatches at final completion: {stats['final_mismatches']}  (target: 0)")
 
     assert stats["oversubscription"] >= 3.0, "workload was not 3x oversubscribed"
     assert stats["mismatches"] == 0, "a resumed request diverged"
+    assert stats["final_mismatches"] == 0, "a token sequence changed after completion"
     assert stats["completed"] == N
     print("\nOK: 3x+ oversubscribed, every request finished, zero divergence.")
 

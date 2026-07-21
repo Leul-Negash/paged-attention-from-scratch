@@ -49,7 +49,11 @@ class PreemptionEngine:
         self.recompute_evictions = 0
         self.swap_evictions = 0
         self.mismatches = 0
+        self.final_mismatches = 0
         self.completed = 0
+        # Hash taken the moment a request finishes, re-checked at the very end.
+        self.completion_hashes: dict[int, str] = {}
+        self.finished: list[Request] = []
         self.peak_demand = 0
 
     # -- reference output for the byte-identical check ---------------------
@@ -147,8 +151,11 @@ class PreemptionEngine:
                     continue  # got evicted while another request was growing
                 self._grow(req)
                 if req.done:
-                    if _hash_tokens(req.tokens) != self._expected_hash(req):
+                    digest = _hash_tokens(req.tokens)
+                    if digest != self._expected_hash(req):
                         self.mismatches += 1
+                    self.completion_hashes[req.id] = digest
+                    self.finished.append(req)
                     self.alloc.release(req)
                     del self.running[req.id]
                     self.completed += 1
@@ -157,12 +164,19 @@ class PreemptionEngine:
             if t > STEP_CAP:
                 raise RuntimeError("did not converge")
 
+        # Second pass: re-hash every finished request now that the whole run is
+        # over, and compare against the hash taken at its own completion.
+        for req in self.finished:
+            if _hash_tokens(req.tokens) != self.completion_hashes[req.id]:
+                self.final_mismatches += 1
+
         assert self.alloc.num_used == 0, "leaked blocks after draining"
         return {
             "completed": self.completed,
             "recompute_evictions": self.recompute_evictions,
             "swap_evictions": self.swap_evictions,
             "mismatches": self.mismatches,
+            "final_mismatches": self.final_mismatches,
             "peak_demand": self.peak_demand,
             "capacity_tokens": self.capacity_tokens,
             "oversubscription": self.peak_demand / self.capacity_tokens,

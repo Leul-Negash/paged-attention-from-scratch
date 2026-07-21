@@ -53,7 +53,7 @@ Each script is self-contained and prints its own results and assertions.
 | 1b | PagedAllocator correctness | 200,000 requests (10k x 5 seeds x block sizes 4/8/16/32), zero leaks, no off-by-one |
 | 1c | Naive vs Paged, same seed | Paged: 0 rejections vs 94, ~4% internal vs ~46%, deterministic |
 | 1d | Correctness harness | disjointness held every step; double-free, use-after-free and boundary-miss injected **mid-run**, all caught, run survives |
-| 2a | Preemption under 3x+ oversubscription | recompute + swap, all 500 finish, **0** byte-identical mismatches |
+| 2a | Preemption under 3x+ oversubscription | recompute + swap, all 500 finish, **0** byte-identical mismatches at first completion and **0** on re-check at final completion |
 | 2b | SLA scheduler | priority + deadline order, budgets enforced exactly, **0** deadline misses, **0** orphaned blocks |
 | 2c | Deadlock detection | DFS cycle detection O(V+E) run **every time step**; crafted 2- and 3-cycles broken in one step; 300-step live sim, no cycle survives its step; 2000 random graphs recover |
 | 3a | Copy-on-write | N in {1,2,4,8}, reads share, writes clone (N-1 clones), no crossed streams |
