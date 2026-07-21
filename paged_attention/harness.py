@@ -1,9 +1,11 @@
 """Task 1d - a correctness harness that rides alongside the PagedAllocator.
 
 It does two jobs:
-  1. Every step it asserts that no two active requests share a physical block.
-  2. It deliberately injects the three classic memory bugs and confirms each is
-     caught and reported, never crashing the run.
+  1. assert_disjoint() - every step, no two active requests may share a block.
+  2. guard() - run an operation and report any allocator error instead of
+     letting it propagate, so an injected fault never crashes the run.
+
+The faults themselves are injected mid-run by run/task1d_harness.py.
 """
 
 from .exceptions import AllocatorError
