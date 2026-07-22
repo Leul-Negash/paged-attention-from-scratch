@@ -35,15 +35,17 @@ paged_attention/            core library, one module per concept
   prefix_cache.py           Task 3b content-addressed prefix sharing
   distributed.py            Task 3c 4-node page table
 run/                        one runnable script per task deliverable
-run_all.py                  runs everything (optionally: `python run_all.py 2a 2b`)
+run_all.py                  runs everything (optionally: `python3 run_all.py 2a 2b`)
 ```
 
 ## Running
 
 ```
-python run_all.py            # all tasks
-python run/task1c_compare.py # a single task
+python3 run_all.py            # all tasks
+python3 run/task1c_compare.py # a single task
 ```
+
+Python 3.10+, standard library only.
 
 Each script is self-contained and prints its own results and assertions.
 
